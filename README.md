@@ -27,7 +27,7 @@ Add a keybinding in `~/.config/yazi/keymap.toml`:
 [[manager.prepend_keymap]]
 on = ["g", "q"]
 run = "plugin ghq"
-desc = "Navigate to ghq repository"
+desc = "Go ghq repo"
 ```
 
 ## License
