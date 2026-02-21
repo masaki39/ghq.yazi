@@ -10,13 +10,13 @@ A [Yazi](https://github.com/sxyazi/yazi) plugin to navigate to [ghq](https://git
 ## Installation
 
 ```sh
-ya pkg add masaki39/ghq.yazi
+ya pkg add masaki39/ghq
 ```
 
 ## Update
 
 ```sh
-ya pkg upgrade masaki39/ghq.yazi
+ya pkg upgrade masaki39/ghq
 ```
 
 ## Configuration
