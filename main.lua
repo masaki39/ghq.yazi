@@ -1,0 +1,39 @@
+return {
+    entry = function()
+        local ghq_output, _ = Command("ghq"):arg({ "list", "-p" }):stdout(Command.PIPED):output()
+        if not ghq_output or ghq_output.stdout == "" then
+            ya.notify { title = "ghq.yazi", content = "ghq list failed", level = "error", timeout = 3 }
+            return
+        end
+
+        local permit = ui.hide()
+        local child, spawn_err = Command("fzf")
+            :stdin(Command.PIPED)
+            :stdout(Command.PIPED)
+            :stderr(Command.INHERIT)
+            :spawn()
+
+        if not child then
+            permit:drop()
+            ya.notify { title = "ghq.yazi", content = "fzf failed: " .. tostring(spawn_err), level = "error", timeout = 3 }
+            return
+        end
+
+        child:write_all(ghq_output.stdout)
+        child:flush()
+        local output, err = child:wait_with_output()
+        permit:drop()
+
+        if not output then
+            ya.notify { title = "ghq.yazi", content = tostring(err), level = "error", timeout = 3 }
+            return
+        end
+        if not output.status.success then
+            return
+        end
+        local dir = output.stdout:gsub("\n$", "")
+        if dir ~= "" then
+            ya.emit("cd", { dir, raw = true })
+        end
+    end,
+}
