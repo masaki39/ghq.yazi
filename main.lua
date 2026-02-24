@@ -1,6 +1,13 @@
 return {
     entry = function()
-        local ghq_output, _ = Command("ghq"):arg({ "list", "-p" }):stdout(Command.PIPED):output()
+        local root_output, _ = Command("ghq"):arg({ "root" }):stdout(Command.PIPED):output()
+        if not root_output or root_output.stdout == "" then
+            ya.notify { title = "ghq.yazi", content = "ghq root failed", level = "error", timeout = 3 }
+            return
+        end
+        local ghq_root = root_output.stdout:gsub("\n$", "")
+
+        local ghq_output, _ = Command("ghq"):arg({ "list" }):stdout(Command.PIPED):output()
         if not ghq_output or ghq_output.stdout == "" then
             ya.notify { title = "ghq.yazi", content = "ghq list failed", level = "error", timeout = 3 }
             return
@@ -31,9 +38,9 @@ return {
         if not output.status.success then
             return
         end
-        local dir = output.stdout:gsub("\n$", "")
-        if dir ~= "" then
-            ya.emit("cd", { dir, raw = true })
+        local selected = output.stdout:gsub("\n$", "")
+        if selected ~= "" then
+            ya.emit("cd", { ghq_root .. "/" .. selected, raw = true })
         end
     end,
 }
