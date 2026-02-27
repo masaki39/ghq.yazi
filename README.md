@@ -24,7 +24,7 @@ ya pkg upgrade masaki39/ghq
 Add a keybinding in `~/.config/yazi/keymap.toml`:
 
 ```toml
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on = ["g", "q"]
 run = "plugin ghq"
 desc = "Go ghq repo"
